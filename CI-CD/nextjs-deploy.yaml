@@ -1,0 +1,95 @@
+---
+- name: Deploy nextjs application 
+  hosts: all
+  gather_facts: false
+  become: true
+  vars:
+    DOCKERHUB_USERNAME: "{{ dockerhub_username }}"
+    DOCKERHUB_TOKEN: "{{ dockerhub_token }}"
+    IMAGE_NAME: "{{ image_name }}"
+    CONTAINER_NAME: "{{ container_name }}"
+    DOMAIN_NAME: "{{ domain_name }}"
+
+  tasks:
+    - name: Update the server
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install Docker packages
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+
+    - name: Start the docker service
+      ansible.builtin.service:
+        name: docker 
+        state: started
+        enabled: true
+
+    - name: Install nginx 
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Start the web service
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Login to Docker hub
+      community.docker.docker_login:
+        username: "{{ DOCKERHUB_USERNAME }}"
+        password: "{{ DOCKERHUB_TOKEN }}"
+
+    - name: Pull the docker image
+      community.docker.docker_image:
+        name: "{{ IMAGE_NAME }}"
+        source: pull
+
+    - name: Run the docker container
+      community.docker.docker_container:
+        name: "{{ CONTAINER_NAME }}"
+        image: "{{ IMAGE_NAME }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "3001:3000"
+
+    - name: Wait for container to start
+      ansible.builtin.wait_for:
+        port: 3001
+        delay: 5
+        host: localhost
+        state: started
+        timeout: 60
+
+    - name: Check if nginx file exists
+      ansible.builtin.stat:
+        path: "/etc/nginx/sites-available/{{ DOMAIN_NAME }}"
+      register: nginx_check
+
+    - name: Configure nginx configuration
+      ansible.builtin.template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/sites-available/{{ DOMAIN_NAME }}
+      when: not nginx_check.stat.exists
+
+    - name: Enable nginx site
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/{{ DOMAIN_NAME }}
+        dest: /etc/nginx/sites-enabled/{{ DOMAIN_NAME }}
+        state: link
+      when: not nginx_check.stat.exists
+      notify: restart the nginx service
+
+    - name: Check web server is availabe or not
+      ansible.builtin.command: nginx -t
+      register: check_nginx
+
+  handlers:
+    - name: restart the nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: restated  
+      when: check_nginx.rc == 0 
