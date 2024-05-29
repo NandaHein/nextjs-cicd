@@ -18,11 +18,10 @@ env:
     
 jobs:
   build_nextjsapp:
-
     runs-on: ubuntu_latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4.1.6
 
       - name: Login to Dockerhub
         run: | 
@@ -42,8 +41,8 @@ jobs:
     needs: build_nextjsapp
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4.1.6
 
       - name: Configure SSH Connection
         run: |
