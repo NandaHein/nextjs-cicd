@@ -54,6 +54,7 @@
         image: "{{ REPO_NAME }}/{{ IMAGE_NAME }}"
         state: started
         restart_policy: always
+        pull: true
         ports:
           - "3001:3000"
 
