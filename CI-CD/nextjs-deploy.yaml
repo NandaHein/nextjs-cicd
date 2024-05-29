@@ -1,7 +1,7 @@
 ---
 - name: Deploy nextjs application 
   hosts: all
-  gather_facts: false
+  #gather_facts: false
   become: true
   vars:
     DOCKERHUB_USERNAME: "{{ dockerhub_username }}"
