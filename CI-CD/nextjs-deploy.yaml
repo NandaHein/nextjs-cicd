@@ -46,15 +46,15 @@
     - name: Pull the docker image
       community.docker.docker_image:
         name: "{{ REPO_NAME }}/{{ IMAGE_NAME }}"
-        source: pull
+        source: pull  
 
-    - name: Run the docker container
-      community.docker.docker_container:
+    - name: Run Docker container
+      docker_container:
         name: "{{ CONTAINER_NAME }}"
-        image: "{{ REPO_NAME }}/{{ IMAGE_NAME }}"
+        image: "{{ IMAGE_NAME }}"
         state: started
-        restart_policy: always
         pull: true
+        restart_policy: always
         ports:
           - "3001:3000"
 
