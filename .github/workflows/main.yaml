@@ -47,6 +47,7 @@ jobs:
       - name: Configure SSH Connection
         run: |
           mkdir -p ~/.ssh
+          touch ~/.ssh/private.key
           echo $SSH_PRIVATE_KEY > ~/.ssh/private.key
           chmod 400 ~/.ssh/private.key
           eval $(ssh-agent -s)
