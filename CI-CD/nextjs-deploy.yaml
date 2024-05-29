@@ -51,7 +51,7 @@
     - name: Run Docker container
       docker_container:
         name: "{{ CONTAINER_NAME }}"
-        image: "{{ REPO_NAME }}"/"{{ IMAGE_NAME }}"
+        image: "{{ REPO_NAME }}/{{ IMAGE_NAME }}"
         state: started
         pull: true
         restart_policy: always
