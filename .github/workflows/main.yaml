@@ -73,6 +73,6 @@ jobs:
           -e "image_name=$IMAGE_NAME" \
           -e "container_name=$CONTAINER_NAME" \
           -e "domain_name=$DOMAIN_NAME" \
-          -e "repo_name=$REPO_NAME"
+          -e "repo_name=$REPO_NAME" \
           CI-CD/nextjs-deploy.yaml
 
