@@ -49,7 +49,7 @@
         source: pull  
 
     - name: Run Docker container
-      docker_container:
+      community.docke.docker_container:
         name: "{{ CONTAINER_NAME }}"
         image: "{{ REPO_NAME }}/{{ IMAGE_NAME }}"
         state: started

@@ -7,14 +7,14 @@ on:
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-  REPO_NAME: ${{ secrets.REPO_NAME }}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   IMAGE_NAME: ${{ vars.IMAGE_NAME }}
   REMOTE_HOST: ${{ vars.REMOTE_HOST }}
   REMOTE_USER: ${{ vars.REMOTE_USER }}
-  CONTAINER_NAME: $ {{ vars.CONTAINER_NAME }}
+  CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
   DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}
+  REPO_NAME: ${{ vars.REPO_NAME }}
    
 jobs:
   build_nextjsapp:
