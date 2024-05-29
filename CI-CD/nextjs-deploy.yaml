@@ -9,6 +9,7 @@
     IMAGE_NAME: "{{ image_name }}"
     CONTAINER_NAME: "{{ container_name }}"
     DOMAIN_NAME: "{{ domain_name }}"
+    REPO_NAME: "{{ repo_name }}"
 
   tasks:
     - name: Update the server
@@ -44,13 +45,13 @@
 
     - name: Pull the docker image
       community.docker.docker_image:
-        name: "{{ IMAGE_NAME }}"
+        name: "{{ REPO_NAME }}/{{ IMAGE_NAME }}"
         source: pull
 
     - name: Run the docker container
       community.docker.docker_container:
         name: "{{ CONTAINER_NAME }}"
-        image: "{{ IMAGE_NAME }}"
+        image: "{{ REPO_NAME }}/{{ IMAGE_NAME }}"
         state: started
         restart_policy: always
         ports:

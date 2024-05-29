@@ -18,8 +18,8 @@ env:
     
 jobs:
   build_nextjsapp:
-    runs_on: ubuntu_latest
 
+    runs-on: ubuntu_latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,6 +39,7 @@ jobs:
 
   deploy_nextjsapp:
     runs-on: ubuntu-latest
+    needs: build_nextjsapp
 
     steps:
       - name: Checkout code
@@ -62,7 +63,7 @@ jobs:
 
       - name: Configure ansible hosts
         run: |
-          echo "SERVER ansible_host=$REMOTE_HOST ansible_user=$REMOTE_USER host_key_checking = False ansible_ssh_private_key_file=~/.ssh/private.key" > inventory
+          echo "SERVER ansible_host=$REMOTE_HOST ansible_user=$REMOTE_USER host_key_checking=False ansible_ssh_private_key_file=~/.ssh/private.key" > inventory
 
       - name: Deploy nextjs app with ansible
         run: |
@@ -72,5 +73,6 @@ jobs:
           -e "image_name=$IMAGE_NAME" \
           -e "container_name=$CONTAINER_NAME" \
           -e "domain_name=$DOMAIN_NAME" \
+          -e "repo_name=$REPO_NAME"
           CI-CD/nextjs-deploy.yaml
 
